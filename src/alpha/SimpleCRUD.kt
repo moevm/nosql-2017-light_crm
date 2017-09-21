@@ -18,6 +18,10 @@ class SimpleCRUD{
                 arangoObject.addAttribute("a", 123);
                 arangoObject.addAttribute("b", 345);
 
+                println("Data to write: \na: " + arangoObject.getAttribute("a") +
+                                       "\nb: " + arangoObject.getAttribute("b") +
+                                       "\nc: " + arangoObject.getAttribute("c"))
+
                 if(!arangoDB.accessibleDatabases.contains(dbName)) {
 
                     arangoDB.createDatabase(dbName);
@@ -29,15 +33,19 @@ class SimpleCRUD{
                 if(!arangoDB.db(dbName).collection(collectionName).documentExists("testKey")) arangoDB.db(dbName).collection(collectionName).insertDocument(arangoObject);
 
                 var objectToRead = arangoDB.db(dbName).collection(collectionName).getDocument("testKey", BaseDocument::class.java);
-                println("Key: " + objectToRead.key);
+                println("Read: \nKey: " + objectToRead.key);
                 println("a: " + objectToRead.getAttribute("a"));
                 println("b: " + objectToRead.getAttribute("b"));
 
                 arangoObject.addAttribute("c", 567);
                 arangoDB.db(dbName).collection(collectionName).updateDocument("testKey", arangoObject);
 
+                println("Data to update: \na: " + arangoObject.getAttribute("a") +
+                        "\nb: " + arangoObject.getAttribute("b") +
+                        "\nc: " + arangoObject.getAttribute("c"))
+
                 objectToRead = arangoDB.db(dbName).collection(collectionName).getDocument("testKey", BaseDocument::class.java);
-                println("Key: " + objectToRead.key);
+                println("Read: \nKey: " + objectToRead.key);
                 println("a: " + objectToRead.getAttribute("a"));
                 println("b: " + objectToRead.getAttribute("b"));
                 println("c: " + objectToRead.getAttribute("c"));
@@ -47,8 +55,6 @@ class SimpleCRUD{
             } catch (e : ArangoDBException){
                 println("Failed to process database " + dbName + "\n" + e.message);
             }
-
-
         }
     }
 }
