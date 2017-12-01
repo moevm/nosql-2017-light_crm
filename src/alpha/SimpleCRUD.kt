@@ -8,7 +8,7 @@ import com.arangodb.entity.BaseDocument
 class SimpleCRUD{
     companion object {
         @JvmStatic fun main(args : Array<String>){
-            var arangoDB = ArangoDB.Builder().user("foo").password("bar").build();
+            var arangoDB = ArangoDB.Builder().user("root").password("root").build();
 
             val dbName = "testDB";
             try {
