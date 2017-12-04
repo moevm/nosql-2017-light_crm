@@ -12,8 +12,24 @@ class ArangoCRUD {
     }
     companion object {
 
+        //Временная функция для наполения базы и тестирования CRUD
         @JvmStatic fun main(args: Array<String>) {
             CreateDB();
+            //Добавим юзеров
+            UpdateDB("kek", "male", "1999-10-12", "2017-11-30");
+            UpdateDB("cheburek", "female", "2000-01-12", "2017-10-30");
+            UpdateDB("lol", "male", "1996-01-01", "2017-11-29");
+            UpdateDB("lul", "female", "1997-06-12", "2017-11-30");
+
+            //Добавим инфу о сайте
+            UpdateDB("Сайт о чебуреках", "cheburekoff.net", "ucoz.ru", "96.98.181.0", "Вкусные чебуреки только тут!", "https://i.ytimg.com/vi/3lqlc-ooJpE/hqdefault.jpg");
+
+            //Добавим юзеров
+            UpdateDB(121998, "2017-04-12 13:22", "Google Chrome");
+            UpdateDB(122001, "2017-04-12 14:15", "Microsoft Edge");
+            UpdateDB(121998, "2017-04-12 15:54", "Google Chrome");
+            UpdateDB(122004, "2017-04-12 15:56", "Google Chrome");
+
         }
 
         @JvmStatic val arangoDB = ArangoDB.Builder().user("root").password("root").build();
@@ -40,11 +56,9 @@ class ArangoCRUD {
             }
         }
         //Users Collection
-        @JvmOverloads fun UpdateDB(id: Int, username: String, sex: String, birthday: String, registration_date: String) {
+        @JvmOverloads fun UpdateDB(username: String, sex: String, birthday: String, registration_date: String) {
             try {
                 var arangoObject = BaseDocument();
-                arangoObject.setKey("user");
-                arangoObject.addAttribute("id", id);
                 arangoObject.addAttribute("username", username);
                 arangoObject.addAttribute("sex", sex);
                 arangoObject.addAttribute("birthday", birthday);
@@ -59,11 +73,9 @@ class ArangoCRUD {
             }
         }
         //Visitores Collection
-        @JvmOverloads fun UpdateDB(num: Int, user_id: Int, visit: String, browser: String) {
+        @JvmOverloads fun UpdateDB(user_id: Int, visit: String, browser: String) {
             try {
                 var arangoObject = BaseDocument();
-                arangoObject.setKey("visitor");
-                arangoObject.addAttribute("num", num);
                 arangoObject.addAttribute("user_id", user_id);
                 arangoObject.addAttribute("visit", visit);
                 arangoObject.addAttribute("browser", browser);
@@ -80,7 +92,6 @@ class ArangoCRUD {
         @JvmOverloads fun UpdateDB(site_name: String, site_address: String, hosting: String, ip_address: String, site_descr: String, site_logo: String) {
             try {
                 var arangoObject = BaseDocument();
-                arangoObject.setKey("site");
                 arangoObject.addAttribute("site_name", site_name);
                 arangoObject.addAttribute("site_address", site_address);
                 arangoObject.addAttribute("hosting", hosting);
