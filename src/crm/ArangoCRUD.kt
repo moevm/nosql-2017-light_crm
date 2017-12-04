@@ -15,21 +15,37 @@ class ArangoCRUD {
         //Временная функция для наполения базы и тестирования CRUD
         @JvmStatic fun main(args: Array<String>) {
             CreateDB();
+            //Удалим юзеров
+            deleteDoc(122001, "User")
+            deleteDoc(121998, "User")
+            deleteDoc(121994, "User")
+            deleteDoc(122004, "User")
+
             //Добавим юзеров
             UpdateDB("kek", "male", "1999-10-12", "2017-11-30");
             UpdateDB("cheburek", "female", "2000-01-12", "2017-10-30");
             UpdateDB("lol", "male", "1996-01-01", "2017-11-29");
             UpdateDB("lul", "female", "1997-06-12", "2017-11-30");
 
+            //Удалим инфу о сайте
+            deleteDoc(122007, "Site")
+
             //Добавим инфу о сайте
             UpdateDB("Сайт о чебуреках", "cheburekoff.net", "ucoz.ru", "96.98.181.0", "Вкусные чебуреки только тут!", "https://i.ytimg.com/vi/3lqlc-ooJpE/hqdefault.jpg");
 
-            //Добавим юзеров
+            //Удалим посетителей
+            deleteDoc(122725, "Visitor")
+            deleteDoc(122735, "Visitor")
+            deleteDoc(122732, "Visitor")
+            deleteDoc(122729, "Visitor")
+
+            //Добавим посетителей
             UpdateDB(121998, "2017-04-12 13:22", "Google Chrome");
             UpdateDB(122001, "2017-04-12 14:15", "Microsoft Edge");
             UpdateDB(121998, "2017-04-12 15:54", "Google Chrome");
             UpdateDB(122004, "2017-04-12 15:56", "Google Chrome");
 
+            return
         }
 
         @JvmStatic val arangoDB = ArangoDB.Builder().user("root").password("root").build();
@@ -101,6 +117,22 @@ class ArangoCRUD {
 
                 if (arangoDB.accessibleDatabases.contains(dbName)) {
                     arangoDB.db(dbName).collection(collectionNameSite).insertDocument(arangoObject);
+                }
+
+            } catch (e: ArangoDBException) {
+                println("Failed to update database " + dbName + "\n" + e.message);
+            }
+        }
+
+        @JvmStatic fun deleteDoc(doc_id: Int, type: String) {
+            try {
+                if (arangoDB.accessibleDatabases.contains(dbName)) {
+                    if (type == "User")
+                        arangoDB.db(dbName).collection(collectionNameUsers).deleteDocument(doc_id.toString());
+                    if (type == "Visitor")
+                        arangoDB.db(dbName).collection(collectionNameVisitors).deleteDocument(doc_id.toString());
+                    if (type == "Site")
+                        arangoDB.db(dbName).collection(collectionNameSite).deleteDocument(doc_id.toString());
                 }
 
             } catch (e: ArangoDBException) {
