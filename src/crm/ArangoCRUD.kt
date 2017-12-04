@@ -12,9 +12,9 @@ class ArangoCRUD {
     }
     companion object {
 
-        /*@JvmStatic fun main(args: Array<String>) {
+        @JvmStatic fun main(args: Array<String>) {
             CreateDB();
-        }*/
+        }
 
         @JvmStatic val arangoDB = ArangoDB.Builder().user("root").password("root").build();
         @JvmStatic val dbName = "crmDB";
@@ -50,7 +50,7 @@ class ArangoCRUD {
                 arangoObject.addAttribute("birthday", birthday);
                 arangoObject.addAttribute("registration_date", registration_date);
 
-                if (!arangoDB.accessibleDatabases.contains(dbName)) {
+                if (arangoDB.accessibleDatabases.contains(dbName)) {
                     arangoDB.db(dbName).collection(collectionNameUsers).insertDocument(arangoObject);
                 }
 
@@ -68,7 +68,7 @@ class ArangoCRUD {
                 arangoObject.addAttribute("visit", visit);
                 arangoObject.addAttribute("browser", browser);
 
-                if (!arangoDB.accessibleDatabases.contains(dbName)) {
+                if (arangoDB.accessibleDatabases.contains(dbName)) {
                     arangoDB.db(dbName).collection(collectionNameVisitors).insertDocument(arangoObject);
                 }
 
@@ -88,7 +88,7 @@ class ArangoCRUD {
                 arangoObject.addAttribute("site_descr", site_descr);
                 arangoObject.addAttribute("site_logo", site_logo);
 
-                if (!arangoDB.accessibleDatabases.contains(dbName)) {
+                if (arangoDB.accessibleDatabases.contains(dbName)) {
                     arangoDB.db(dbName).collection(collectionNameSite).insertDocument(arangoObject);
                 }
 
