@@ -9,6 +9,7 @@
 
     <properties>
         <kotlin.version>1.0.0</kotlin.version>
+        <tornadofx.version>1.7.12</tornadofx.version>
     </properties>
 
     <dependencies>
@@ -39,6 +40,11 @@
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>no.tornado</groupId>
+            <artifactId>tornadofx</artifactId>
+            <version>${tornadofx.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -64,8 +70,10 @@
                         </goals>
                     </execution>
                 </executions>
+
             </plugin>
         </plugins>
+
     </build>
 
 

@@ -13,7 +13,7 @@ class ArangoCRUD {
     companion object {
 
         //Временная функция для наполения базы и тестирования CRUD
-        @JvmStatic fun main(args: Array<String>) {
+        /*@JvmStatic fun main(args: Array<String>) {
             CreateDB();
             //Удалим юзеров
             deleteDoc(122001, "User")
@@ -46,7 +46,7 @@ class ArangoCRUD {
             UpdateDB(122004, "2017-04-12 15:56", "Google Chrome");
 
             return
-        }
+        }*/
 
         @JvmStatic val arangoDB = ArangoDB.Builder().user("root").password("root").build();
         @JvmStatic val dbName = "crmDB";
