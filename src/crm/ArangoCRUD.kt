@@ -5,8 +5,6 @@ import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDBException
 import com.arangodb.entity.BaseDocument
 import com.arangodb.entity.CollectionEntity
-import com.arangodb.entity.DocumentEntity
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 class ArangoCRUD {
     /*constructor(user: String, password: String) {
