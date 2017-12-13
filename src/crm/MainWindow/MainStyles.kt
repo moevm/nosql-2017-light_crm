@@ -16,7 +16,7 @@ class MainStyles : Stylesheet() {
             prefWidth = 450.px
 
             s(zip) {
-                maxWidth = 60.px
+                maxWidth = 400.px
                 minWidth = maxWidth
             }
         }
