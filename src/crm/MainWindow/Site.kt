@@ -7,14 +7,18 @@ import tornadofx.*
 
 class Site {
     val db :ArangoCRUD = crm.ArangoCRUD()
-    db.ReadDoc("124957", "Site")
+    val objectToRead = db.ReadDoc("124957", "Site")
 
-    fun setData(){
-        sitename = db.getAttribute("site_name").toString()
-        siteadress = db.getAttribute("site_address").toString()
-        ipaddress = db.getAttribute("ip_address").toString()
-        hosting = db.getAttribute("hosting").toString()
-        description = db.getAttribute("site_descr").toString()
+    constructor(){
+        SetData()
+    }
+
+    fun SetData() {
+        sitename = objectToRead.getAttribute("site_name").toString()
+        siteadress = objectToRead.getAttribute("site_address").toString()
+        ipaddress = objectToRead.getAttribute("ip_address").toString()
+        hosting = objectToRead.getAttribute("hosting").toString()
+        description = objectToRead.getAttribute("site_descr").toString()
     }
 
     var sitename by property<String>()
