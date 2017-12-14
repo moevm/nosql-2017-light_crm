@@ -154,27 +154,27 @@ class ArangoCRUD {
         if (arangoDB.accessibleDatabases.contains(dbName)) {
             if (type == "User") {
                 objectToRead = arangoDB.db(dbName).collection(collectionNameUsers).getDocument(key, BaseDocument::class.java);
-                println("username: " + objectToRead.getAttribute("username"));
+                /*println("username: " + objectToRead.getAttribute("username"));
                 println("sex: " + objectToRead.getAttribute("sex"));
                 println("registration_date: " + objectToRead.getAttribute("registration_date"));
-                println("birthday: " + objectToRead.getAttribute("birthday"));
+                println("birthday: " + objectToRead.getAttribute("birthday"));*/
                 return objectToRead;
             }
             if (type == "Visitor") {
                 objectToRead = arangoDB.db(dbName).collection(collectionNameVisitors).getDocument(key, BaseDocument::class.java);
-                println("user_id: " + objectToRead.getAttribute("user_id"));
+                /*println("user_id: " + objectToRead.getAttribute("user_id"));
                 println("visit: " + objectToRead.getAttribute("visit"));
-                println("browser: " + objectToRead.getAttribute("browser"));
+                println("browser: " + objectToRead.getAttribute("browser"));*/
                 return objectToRead;
             }
             if (type == "Site") {
                 objectToRead = arangoDB.db(dbName).collection(collectionNameSite).getDocument(key, BaseDocument::class.java);
-                println("site_name: " + objectToRead.getAttribute("site_name"));
+                /*println("site_name: " + objectToRead.getAttribute("site_name"));
                 println("site_descr: " + objectToRead.getAttribute("site_descr"));
                 println("site_address: " + objectToRead.getAttribute("site_address"));
                 println("site_logo: " + objectToRead.getAttribute("site_logo"));
                 println("hosting: " + objectToRead.getAttribute("hosting"));
-                println("ip_address: " + objectToRead.getAttribute("ip_address"));
+                println("ip_address: " + objectToRead.getAttribute("ip_address"));*/
                 return objectToRead;
             }
         }
