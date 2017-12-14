@@ -13,10 +13,10 @@ class MainStyles : Stylesheet() {
     init {
         s(form) {
             padding = box(25.px)
-            prefWidth = 450.px
+            prefWidth = 700.px
 
             s(zip) {
-                maxWidth = 400.px
+                maxWidth = 700.px
                 minWidth = maxWidth
             }
         }

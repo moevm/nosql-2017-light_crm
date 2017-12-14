@@ -6,44 +6,57 @@ class MainForm : View("CRM") {
     val model : SiteModel by inject()
 
     override val root = form {
-        hbox {
-            vbox {
+        hbox(30.0) {
+            vbox (10.0) {
                 button("Main page") {
+                    prefWidth = 200.0
                     action {
                         print("Hello")
                     }
                 }
                 button("User stats") {
+                    prefWidth = 200.0
                     action {
                         print("Hello")
                     }
                 }
                 button("Visitors stats") {
+                    prefWidth = 200.0
                     action {
                         print("Hello")
                     }
                 }
             }
-            vbox {
+            vbox(10.0) {
                 fieldset("About site") {
                     field("Site name") {
-                        textfield(model.sitename)
+                        textfield(model.sitename) {
+                            prefWidth = 400.0
+                        }
                     }
 
                     field("Site address") {
-                        textfield(model.siteadress)
+                        textfield(model.siteadress){
+                            prefWidth = 400.0
+                        }
                     }
 
                     field("IP address") {
-                        textfield(model.ipaddress)
+                        textfield(model.ipaddress){
+                            prefWidth = 400.0
+                        }
                     }
 
                     field("Hosting") {
-                        textfield(model.hosting)
+                        textfield(model.hosting){
+                            prefWidth = 400.0
+                        }
                     }
 
                     field("Site description") {
-                        textfield(model.description)
+                        textfield(model.description){
+                            prefWidth = 400.0
+                        }
                     }
                 }
 
