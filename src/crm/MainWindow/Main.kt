@@ -7,4 +7,5 @@ class Main : App(MainForm::class, MainStyles::class)
 
 fun main(args: Array<String>) {
     Application.launch(Main::class.java, *args)
+    return
 }

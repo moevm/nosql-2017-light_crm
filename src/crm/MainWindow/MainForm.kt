@@ -6,7 +6,6 @@ import javafx.collections.FXCollections
 import javafx.scene.layout.GridPane
 import tornadofx.*
 import java.awt.ScrollPane
-import tornadofx.ListMenu
 
 
 
@@ -20,6 +19,9 @@ class MainForm : View("CRM") {
             }*/
             tab("Main page", GridPane()) {
                 hbox {
+                    style {
+                        padding = box(20.px)
+                    }
                     vbox(10.0) {
                         imageview(model.sitelogo) {
                             scaleX = .70
@@ -71,7 +73,7 @@ class MainForm : View("CRM") {
                                 prefWidth = 150.0
                                 style = "-fx-font: 20px Tahoma;"
                             }
-                            textfield(model.description) {
+                            textarea(model.description) {
                                 prefWidth = 400.0
                                 prefHeight = 200.0
                             }
@@ -83,6 +85,9 @@ class MainForm : View("CRM") {
             tab("User stats", ScrollPane()) {
                 label("User stats go here!")
                 hbox(10.0) {
+                    style {
+                        padding = box(20.px)
+                    }
                     label("Hosting"){
                         prefWidth = 150.0
                         style = "-fx-font: 20px Tahoma;"
@@ -94,13 +99,27 @@ class MainForm : View("CRM") {
             }
 
             tab("Visitor stats", GridPane()) {
-                label("Visitor stats go here!")
+                vbox(10.0) {
+                    style {
+                        padding = box(20.px)
+                    }
+                    label("Visitor stats go here!")
+                }
             }
             tab("Search", GridPane()) {
-                label("Search here!")
+                vbox(10.0) {
+                    style {
+                        padding = box(20.px)
+                    }
+                    label("Search here!")
+                }
+
             }
             tab("View", GridPane()) {
                 vbox(10.0) {
+                    style {
+                        padding = box(20.px)
+                    }
                     /*var userTable = tableview<String> {
                         //items = FXCollections.observableArrayList("Key","Username","Sex","Birthday","Registration Date")
                     }
@@ -118,7 +137,9 @@ class MainForm : View("CRM") {
 
                         val selectedTable = SimpleStringProperty()
 
-                        combobox(selectedTable, tables)
+                        combobox(selectedTable, tables){
+                            prefWidth = 200.0
+                        }
                         button("Show") {
                             action {
                                 println(selectedTable.value)
