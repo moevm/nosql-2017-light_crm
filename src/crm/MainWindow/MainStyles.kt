@@ -12,8 +12,8 @@ class MainStyles : Stylesheet() {
 
     init {
         s(form) {
-            //padding = box(25.px)
-            prefWidth = 700.px
+            padding = box(0.px)
+            prefWidth = 1200.px
 
 
             s(zip) {

@@ -5,6 +5,10 @@ import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDBException
 import com.arangodb.entity.BaseDocument
 import com.arangodb.entity.CollectionEntity
+import com.arangodb.util.MapBuilder
+import crm.MainWindow.User
+import crm.MainWindow.Visit
+
 
 class ArangoCRUD {
     /*constructor(user: String, password: String) {
@@ -49,6 +53,7 @@ class ArangoCRUD {
     }*/
 
     val arangoDB = ArangoDB.Builder().user("root").password("root").build();
+    //lateinit var db : ArangoDatabase;
     val dbName = "crmDB";
     val collectionNameUsers = "Users";
     val collectionNameVisitors = "Visitors";
@@ -62,6 +67,7 @@ class ArangoCRUD {
 
             if (!arangoDB.accessibleDatabases.contains(dbName)) {
                 arangoDB.createDatabase(dbName);
+                //db = arangoDB.db(dbName)
                 arangoCollectionUsers = arangoDB.db(dbName).createCollection(collectionNameUsers);
                 arangoCollectionVisitors = arangoDB.db(dbName).createCollection(collectionNameVisitors);
                 arangoCollectionSite = arangoDB.db(dbName).createCollection(collectionNameSite);
@@ -153,7 +159,7 @@ class ArangoCRUD {
         var objectToRead : BaseDocument
         if (arangoDB.accessibleDatabases.contains(dbName)) {
             if (type == "User") {
-                objectToRead = arangoDB.db(dbName).collection(collectionNameUsers).getDocument(key, BaseDocument::class.java);
+                objectToRead = arangoDB.db(dbName).collection(collectionNameUsers).getDocument(key, BaseDocument::class.java)
                 /*println("username: " + objectToRead.getAttribute("username"));
                 println("sex: " + objectToRead.getAttribute("sex"));
                 println("registration_date: " + objectToRead.getAttribute("registration_date"));
@@ -180,4 +186,50 @@ class ArangoCRUD {
         }
         return arangoDB.db(dbName).collection(collectionNameSite).getDocument(key, BaseDocument::class.java);
     }
+
+    fun GetAllUserDocs(): ArrayList<User> {
+        val users = ArrayList<User>()
+        if (arangoDB.accessibleDatabases.contains(dbName)) {
+            //if (type == "Users") {
+                val query = "FOR user IN Users RETURN user"
+                val bindVars = MapBuilder().get()
+                val cursor = arangoDB.db(dbName).query(query, bindVars, null, BaseDocument::class.java)
+
+                cursor.forEachRemaining {aDocument ->
+                    users += User(aDocument.key, aDocument.getAttribute("username").toString(), aDocument.getAttribute("sex").toString(),
+                            aDocument.getAttribute("birthday").toString(),aDocument.getAttribute("registration_date").toString()) }
+
+
+            //}
+            /*if (type == "Visitors") {
+                val query = "FOR visitor IN Visitors RETURN visitor"
+                val bindVars = MapBuilder().get()
+                val cursor = arangoDB.db(dbName).query(query, bindVars, null, BaseDocument::class.java)
+                cursor.forEachRemaining { aDocument -> println(aDocument.key + " " + aDocument.getAttribute("user_id")
+                        + " " + aDocument.getAttribute("browser") + " " + aDocument.getAttribute("visit")) }
+            }*/
+        }
+        return users
+    }
+
+    fun GetAllVisitDocs(): ArrayList<Visit> {
+        val visits = ArrayList<Visit>()
+        if (arangoDB.accessibleDatabases.contains(dbName)) {
+            val query = "FOR visit IN Visitors RETURN visit"
+            val bindVars = MapBuilder().get()
+            val cursor = arangoDB.db(dbName).query(query, bindVars, null, BaseDocument::class.java)
+
+            cursor.forEachRemaining {aDocument ->
+                visits += Visit(aDocument.key, aDocument.getAttribute("user_id").toString(), aDocument.getAttribute("browser").toString(),
+                        aDocument.getAttribute("visit").toString()) }
+        }
+        return visits
+    }
 }
+
+/*val query = "FOR user IN Users FILTER user.username == @name RETURN user"
+                val bindVars = MapBuilder().put("name", "lol").get()
+                val cursor = arangoDB.db(dbName).query(query, bindVars, null, BaseDocument::class.java)
+                cursor.forEachRemaining { aDocument -> println(aDocument.key + " " + aDocument.getAttribute("username")
+                        + " " + aDocument.getAttribute("sex") + " " + aDocument.getAttribute("birthday")+ " "
+                        + aDocument.getAttribute("registration_date")) }*/
