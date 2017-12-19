@@ -7,16 +7,12 @@ import javafx.scene.layout.GridPane
 import tornadofx.*
 import java.awt.ScrollPane
 
-
-
 class MainForm : View("CRM") {
     val model : SiteModel by inject()
+    val db : ArangoCRUD = crm.ArangoCRUD()
 
     override val root = form {
         tabpane {
-            /*gridpaneConstraints {
-                vhGrow = Priority.ALWAYS
-            }*/
             tab("Main page", GridPane()) {
                 hbox {
                     style {
@@ -35,7 +31,7 @@ class MainForm : View("CRM") {
                         hbox(10.0) {
                             label("Site name") {
                                 prefWidth = 150.0
-                                style = "-fx-font: 20px Tahoma;"
+                                style = "-fx-font: 18px Tahoma;"
                             }
                             textfield(model.sitename) {
                                 prefWidth = 400.0
@@ -44,7 +40,7 @@ class MainForm : View("CRM") {
                         hbox(10.0) {
                             label("Site address") {
                                 prefWidth = 150.0
-                                style = "-fx-font: 20px Tahoma;"
+                                style = "-fx-font: 18px Tahoma;"
                             }
                             textfield(model.siteadress) {
                                 prefWidth = 400.0
@@ -53,7 +49,7 @@ class MainForm : View("CRM") {
                         hbox(10.0) {
                             label("IP address") {
                                 prefWidth = 150.0
-                                style = "-fx-font: 20px Tahoma;"
+                                style = "-fx-font: 18px Tahoma;"
                             }
                             textfield(model.ipaddress) {
                                 prefWidth = 400.0
@@ -62,7 +58,7 @@ class MainForm : View("CRM") {
                         hbox(10.0) {
                             label("Hosting") {
                                 prefWidth = 150.0
-                                style = "-fx-font: 20px Tahoma;"
+                                style = "-fx-font: 18px Tahoma;"
                             }
                             textfield(model.hosting) {
                                 prefWidth = 400.0
@@ -71,7 +67,7 @@ class MainForm : View("CRM") {
                         hbox(10.0) {
                             label("Site description") {
                                 prefWidth = 150.0
-                                style = "-fx-font: 20px Tahoma;"
+                                style = "-fx-font: 18px Tahoma;"
                             }
                             textarea(model.description) {
                                 prefWidth = 400.0
@@ -83,18 +79,11 @@ class MainForm : View("CRM") {
                 }
             }
             tab("User stats", ScrollPane()) {
-                label("User stats go here!")
-                hbox(10.0) {
+                vbox(10.0) {
                     style {
                         padding = box(20.px)
                     }
-                    label("Hosting"){
-                        prefWidth = 150.0
-                        style = "-fx-font: 20px Tahoma;"
-                    }
-                    textfield(model.hosting) {
-                        prefWidth = 400.0
-                    }
+                    label("User stats go here!")
                 }
             }
 
@@ -111,9 +100,127 @@ class MainForm : View("CRM") {
                     style {
                         padding = box(20.px)
                     }
-                    label("Search here!")
-                }
+                    var uSearch =vbox{}
+                    var vSearch =vbox{}
 
+                    hbox(10.0) {
+                        val tables = FXCollections.observableArrayList("Users", "Visitors")
+                        val selectedTable = SimpleStringProperty()
+
+                        combobox(selectedTable, tables) {
+                            prefWidth = 200.0
+                        }
+                        button("Select") {
+                            action {
+                                val db: ArangoCRUD = crm.ArangoCRUD()
+                                if (selectedTable.value == "Users") {
+                                    uSearch.show()
+                                    vSearch.hide()
+                                }
+                                if (selectedTable.value == "Visitors") {
+                                    vSearch.show()
+                                    uSearch.hide()
+                                }
+                            }
+                        }
+                    }
+                    var userFieldSearch =textarea {}
+                    var visitFieldSearch =textarea {}
+                    userFieldSearch.hide()
+                    visitFieldSearch.hide()
+                    uSearch = vbox(10.0) {
+                        hbox(10.0){
+                            label("Username"){
+                                prefWidth = 200.0
+                                style = "-fx-font: 18px Tahoma;"
+                            }
+                            label("Sex"){
+                                prefWidth = 200.0
+                                style = "-fx-font: 18px Tahoma;"
+                            }
+                            label("Birthday"){
+                                prefWidth = 200.0
+                                style = "-fx-font: 18px Tahoma;"
+                            }
+                            label("Registration Date"){
+                                prefWidth = 200.0
+                                style = "-fx-font: 18px Tahoma;"
+                            }
+                        }
+                        hbox(10.0){
+                            val username = textfield() {
+                                prefWidth = 200.0
+                            }
+                            val sex = textfield() {
+                                prefWidth = 200.0
+                            }
+                            val birthday = textfield() {
+                                prefWidth = 200.0
+                            }
+                            val registration_date = textfield() {
+                                prefWidth = 200.0
+                            }
+                            button("Search") {
+                                action {
+                                    userFieldSearch.clear()
+                                    val z = db.SearchUserDocs(username.text.toString(), sex.text.toString(), birthday.text.toString(), registration_date.text.toString())
+                                    z.forEach{user ->userFieldSearch.setText(userFieldSearch.getText() + "\n"+ user.key + " "+user.username+ " "+
+                                            user.sex+ " "+user.birthday+ " "+user.registration_date)}
+                                    userFieldSearch.show()
+                                    visitFieldSearch.hide()
+                                }
+                            }
+                        }
+                    }
+                    uSearch.hide()
+                    vSearch = vbox(10.0) {
+                        hbox(10.0){
+                            label("User_id"){
+                                prefWidth = 200.0
+                                style = "-fx-font: 18px Tahoma;"
+                            }
+                            label("Visit"){
+                                prefWidth = 200.0
+                                style = "-fx-font: 18px Tahoma;"
+                            }
+                            label("Browser"){
+                                prefWidth = 200.0
+                                style = "-fx-font: 18px Tahoma;"
+                            }
+                        }
+                        hbox(10.0){
+                            val user_id = textfield() {
+                                //Заменить на username
+                                prefWidth = 200.0
+                            }
+                            val visit = textfield() {
+                                prefWidth = 200.0
+                            }
+                            val browser = textfield() {
+                                prefWidth = 200.0
+                            }
+                            button("Search") {
+                                action {
+                                    visitFieldSearch.clear()
+                                    val z = db.SearchVisitDocs(user_id.text.toString(), browser.text.toString(), visit.text.toString())
+                                    z.forEach{visit ->visitFieldSearch.setText(visitFieldSearch.getText() + "\n"+ visit.key + " "+visit.user_id+ " "+
+                                            visit.browser+ " "+visit.visit)}
+                                    visitFieldSearch.show()
+                                    userFieldSearch.hide()
+                                }
+                            }
+                        }
+                    }
+                    vSearch.hide()
+                    userFieldSearch =textarea {
+                        prefWidth = 400.0
+                    }
+                    userFieldSearch.hide()
+                    visitFieldSearch =textarea {
+                        prefWidth = 400.0
+                    }
+                    visitFieldSearch.hide()
+                }
             }
             tab("View", GridPane()) {
                 vbox(10.0) {
@@ -124,17 +231,12 @@ class MainForm : View("CRM") {
                         //items = FXCollections.observableArrayList("Key","Username","Sex","Birthday","Registration Date")
                     }
                     userTable.hide()*/
-                    var userField =textarea {
-                        prefWidth = 400.0
-                    }
+                    var userField =textarea {}
+                    var visitField =textarea {}
                     userField.hide()
-                    var visitField =textarea {
-                        prefWidth = 400.0
-                    }
                     visitField.hide()
                     hbox(10.0) {
                         val tables = FXCollections.observableArrayList("Users", "Visitors")
-
                         val selectedTable = SimpleStringProperty()
 
                         combobox(selectedTable, tables){
@@ -142,8 +244,6 @@ class MainForm : View("CRM") {
                         }
                         button("Show") {
                             action {
-                                println(selectedTable.value)
-                                val db : ArangoCRUD = crm.ArangoCRUD()
                                 if (selectedTable.value == "Users") {
                                     val z = db.GetAllUserDocs()
 
@@ -167,10 +267,15 @@ class MainForm : View("CRM") {
                                 }
                             }
                         }
-
                     }
-
-
+                    userField =textarea {
+                        prefWidth = 400.0
+                    }
+                    userField.hide()
+                    visitField =textarea {
+                        prefWidth = 400.0
+                    }
+                    visitField.hide()
                 }
             }
         }
