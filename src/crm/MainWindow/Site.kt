@@ -19,6 +19,7 @@ class Site {
         ipaddress = objectToRead.getAttribute("ip_address").toString()
         hosting = objectToRead.getAttribute("hosting").toString()
         description = objectToRead.getAttribute("site_descr").toString()
+        sitelogo = objectToRead.getAttribute("site_logo").toString()
     }
 
     var sitename by property<String>()
@@ -36,6 +37,9 @@ class Site {
     var description by property<String>()
     fun descriptionProperty() = getProperty(Site::description)
 
+    var sitelogo by property<String>()
+    fun sitelogoProperty() = getProperty(Site::sitelogo)
+
     override fun toString() = sitename
 }
 
@@ -45,4 +49,5 @@ class SiteModel : ItemViewModel<Site>(Site()) {
     val ipaddress: StringProperty = bind { item?.ipaddressProperty() }
     val hosting:StringProperty = bind { item?.hostingProperty() }
     val description:StringProperty = bind { item?.descriptionProperty() }
+    val sitelogo:StringProperty = bind { item?.sitelogoProperty() }
 }
