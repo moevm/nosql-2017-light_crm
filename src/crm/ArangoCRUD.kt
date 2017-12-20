@@ -242,7 +242,7 @@ class ArangoCRUD {
         }
         return users
     }
-    
+
     fun SearchVisitDocs(user_id: String, browser: String, visit: String): ArrayList<Visit> {
         val visits = ArrayList<Visit>()
         if (arangoDB.accessibleDatabases.contains(dbName)) {
