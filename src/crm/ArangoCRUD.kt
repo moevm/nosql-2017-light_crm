@@ -218,7 +218,8 @@ class ArangoCRUD {
     fun SearchUserDocs(username: String, sex: String, birthday: String, registration_date: String): ArrayList<User> {
         val users = ArrayList<User>()
         if (arangoDB.accessibleDatabases.contains(dbName)) {
-            var query = "FOR user IN Users FILTER"//Убрать фильтер когда пустой запрос
+            var query = "FOR user IN Users"//Убрать фильтер когда пустой запрос
+            if (username != "" || sex != "" || birthday != "" || registration_date != ""){query +=" FILTER"}
             if (username != "") { query += " user.username == \""+username+"\" "}
             if (sex != "") {
                 if (username != ""){ query += "&&" }
@@ -232,7 +233,7 @@ class ArangoCRUD {
                 if (username != "" || sex != "" || birthday != ""){ query += "&&" }
                 query += " user.registration_date == \""+registration_date+"\" "
             }
-            query += "RETURN user"
+            query += " RETURN user"
             val bindVars = MapBuilder().get()
 
             val cursor = arangoDB.db(dbName).query(query, bindVars, null, BaseDocument::class.java)
@@ -246,7 +247,8 @@ class ArangoCRUD {
     fun SearchVisitDocs(user_id: String, browser: String, visit: String): ArrayList<Visit> {
         val visits = ArrayList<Visit>()
         if (arangoDB.accessibleDatabases.contains(dbName)) {
-            var query = "FOR visit IN Visitors FILTER" //Убрать фильтер когда пустой запрос
+            var query = "FOR visit IN Visitors" //Убрать фильтер когда пустой запрос
+            if (user_id != "" || browser != "" || visit != ""){query +=" FILTER"}
             if (user_id != "") { query += " visit.user_id == "+user_id+" "}
             if (browser != "") {
                 if (user_id != ""){ query += "&&" }
@@ -256,7 +258,7 @@ class ArangoCRUD {
                 if (user_id != "" || browser != ""){ query += "&&" }
                 query += " visit.visit == \""+visit+"\" "
             }
-            query += "RETURN visit"
+            query += " RETURN visit"
             val bindVars = MapBuilder().get()
 
             val cursor = arangoDB.db(dbName).query(query, bindVars, null, BaseDocument::class.java)
@@ -265,5 +267,32 @@ class ArangoCRUD {
                         aDocument.getAttribute("visit").toString()) }
         }
         return visits
+    }
+
+    fun GetBrowserDocs(): MutableMap<String, Double> {
+        var browsers :MutableMap<String, Double> = mutableMapOf()
+        if (arangoDB.accessibleDatabases.contains(dbName)) {
+            val query = "FOR user IN Visitors  COLLECT browser = user.browser  WITH COUNT INTO number  RETURN { " +
+                    " browser: browser, number: number }"
+            val bindVars = MapBuilder().get()
+            val cursor = arangoDB.db(dbName).query(query, bindVars, null, BaseDocument::class.java)
+
+            cursor.forEachRemaining {aDocument ->
+                browsers.put(aDocument.properties.get("browser").toString(), aDocument.properties.get("number").toString().toDouble()) }
+        }
+        return browsers
+    }
+
+    fun GetSexDocs(): MutableMap<String, Double> {
+        var sex :MutableMap<String, Double> = mutableMapOf()
+        if (arangoDB.accessibleDatabases.contains(dbName)) {
+            val query = "FOR user IN Users COLLECT sex = user.sex WITH COUNT INTO number RETURN { sex: sex, number: number } "
+            val bindVars = MapBuilder().get()
+            val cursor = arangoDB.db(dbName).query(query, bindVars, null, BaseDocument::class.java)
+
+            cursor.forEachRemaining {aDocument ->
+                sex.put(aDocument.properties.get("sex").toString(), aDocument.properties.get("number").toString().toDouble()) }
+        }
+        return sex
     }
 }

@@ -83,7 +83,12 @@ class MainForm : View("CRM") {
                     style {
                         padding = box(20.px)
                     }
-                    label("User stats go here!")
+                    val z = db.GetBrowserDocs()
+                    piechart("Browser") {
+                        for (item in z) {
+                            data(item.key, item.value)
+                        }
+                    }
                 }
             }
 
@@ -92,7 +97,12 @@ class MainForm : View("CRM") {
                     style {
                         padding = box(20.px)
                     }
-                    label("Visitor stats go here!")
+                    val z = db.GetSexDocs()
+                    piechart("Sex") {
+                        for (item in z) {
+                            data(item.key, item.value)
+                        }
+                    }
                 }
             }
             tab("Search", GridPane()) {
